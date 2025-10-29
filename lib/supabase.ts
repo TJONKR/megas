@@ -7,7 +7,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 export const createServerSupabaseClient = () => {
   // Dynamic import to avoid client-side bundling
   const { cookies } = require('next/headers');
-  
+
   return createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       async get(name: string) {

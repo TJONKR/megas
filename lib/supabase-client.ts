@@ -7,7 +7,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 export const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey, {
   cookies: {
     getAll() {
-      return document.cookie.split(';').map(cookie => {
+      return document.cookie.split(';').map((cookie) => {
         const [name, value] = cookie.trim().split('=');
         return { name, value };
       });

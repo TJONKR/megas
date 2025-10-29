@@ -1,12 +1,16 @@
 'use client';
 
-import { signOut } from '@app/(auth)/supabase-auth';
+import { signOutAction } from '@app/(auth)/actions';
+import { useRouter } from 'next/navigation';
 
 export const SignOutForm = () => {
+  const router = useRouter();
+
   const handleSignOut = async () => {
     try {
-      await signOut();
-      window.location.href = '/login';
+      await signOutAction();
+      router.push('/login');
+      router.refresh();
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -15,7 +19,7 @@ export const SignOutForm = () => {
   return (
     <button
       onClick={handleSignOut}
-      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
+      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
     >
       Sign out
     </button>

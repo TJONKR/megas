@@ -23,7 +23,7 @@ export type RegisterActionState = {
 
 export async function login(
   prevState: LoginActionState,
-  formData: FormData,
+  formData: FormData
 ): Promise<LoginActionState> {
   const validatedFields = loginSchema.safeParse({
     email: formData.get('email'),
@@ -38,7 +38,7 @@ export async function login(
   const { email, password } = validatedFields.data;
 
   try {
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -50,7 +50,9 @@ export async function login(
     }
 
     // Check if session was actually set
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
     return { status: 'success' };
   } catch (error) {
@@ -60,7 +62,7 @@ export async function login(
 
 export async function register(
   prevState: RegisterActionState,
-  formData: FormData,
+  formData: FormData
 ): Promise<RegisterActionState> {
   const validatedFields = registerSchema.safeParse({
     email: formData.get('email'),
@@ -75,7 +77,7 @@ export async function register(
   const { email, password } = validatedFields.data;
 
   try {
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
 
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -87,10 +89,17 @@ export async function register(
     }
 
     // Check if session was actually set
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
     return { status: 'success' };
   } catch (error) {
     return { status: 'failed' };
   }
+}
+
+export async function signOutAction(): Promise<void> {
+  const supabase = await createServerSupabaseClient();
+  await supabase.auth.signOut();
 }

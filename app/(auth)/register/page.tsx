@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useActionState, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from '@components/toast';
 
 import { AuthForm } from '@components/auth-form';
@@ -16,14 +16,16 @@ export default function Page() {
   const [email, setEmail] = useState('');
   const [isSuccessful, setIsSuccessful] = useState(false);
 
-  const [state, formAction] = useActionState<RegisterActionState, FormData>(
-    register,
-    {
-      status: 'idle',
-    },
-  );
+  const [state, setState] = useState<RegisterActionState>({
+    status: 'idle',
+  });
 
   useEffect(() => {
+    // Guard against undefined state
+    if (!state) {
+      return;
+    }
+
     if (state.status === 'failed') {
       toast({
         type: 'error',
@@ -39,16 +41,17 @@ export default function Page() {
       router.refresh();
       router.push('/');
     }
-  }, [state.status, router]);
+  }, [state, router]);
 
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit = async (formData: FormData) => {
     setEmail(formData.get('email') as string);
-    formAction(formData);
+    const result = await register(state, formData);
+    setState(result);
   };
 
   return (
-    <div className="flex h-dvh w-screen items-start pt-12 md:pt-0 md:items-center justify-center bg-background">
-      <div className="w-full max-w-md overflow-hidden rounded-2xl flex flex-col gap-12">
+    <div className="flex min-h-screen items-center justify-center bg-background p-6">
+      <div className="flex w-full max-w-md flex-col gap-12 overflow-hidden rounded-2xl">
         <div className="flex flex-col items-center justify-center gap-2 px-4 text-center sm:px-16">
           <h3 className="text-xl font-semibold dark:text-zinc-50">Sign Up</h3>
           <p className="text-sm text-gray-500 dark:text-zinc-400">
@@ -57,7 +60,7 @@ export default function Page() {
         </div>
         <AuthForm action={handleSubmit} defaultEmail={email}>
           <SubmitButton isSuccessful={isSuccessful}>Sign up</SubmitButton>
-          <p className="text-center text-sm text-gray-600 mt-4 dark:text-zinc-400">
+          <p className="mt-4 text-center text-sm text-gray-600 dark:text-zinc-400">
             {'Already have an account? '}
             <Link
               href="/login"

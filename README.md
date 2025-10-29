@@ -1,62 +1,126 @@
-<a href="https://chat.vercel.ai/">
-  <img alt="Next.js 14 and App Router-ready AI chatbot." src="app/(chat)/opengraph-image.png">
-  <h1 align="center">Chat SDK</h1>
-</a>
+# Base Starter Project
 
-<p align="center">
-    Chat SDK is a free, open-source template built with Next.js and the AI SDK that helps you quickly build powerful chatbot applications.
-</p>
-
-<p align="center">
-  <a href="https://chat-sdk.dev"><strong>Read Docs</strong></a> ·
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#model-providers"><strong>Model Providers</strong></a> ·
-  <a href="#deploy-your-own"><strong>Deploy Your Own</strong></a> ·
-  <a href="#running-locally"><strong>Running locally</strong></a>
-</p>
-<br/>
+A clean, production-ready Next.js starter template with authentication and database integration.
 
 ## Features
 
-- [Next.js](https://nextjs.org) App Router
-  - Advanced routing for seamless navigation and performance
-  - React Server Components (RSCs) and Server Actions for server-side rendering and increased performance
-- [AI SDK](https://sdk.vercel.ai/docs)
-  - Unified API for generating text, structured objects, and tool calls with LLMs
-  - Hooks for building dynamic chat and generative user interfaces
-  - Supports OpenAI (default), Anthropic, Fireworks, and other model providers
-- [shadcn/ui](https://ui.shadcn.com)
-  - Styling with [Tailwind CSS](https://tailwindcss.com)
-  - Component primitives from [Radix UI](https://radix-ui.com) for accessibility and flexibility
-- Data Persistence
-  - [Neon Serverless Postgres](https://vercel.com/marketplace/neon) for saving chat history and user data
-  - [Vercel Blob](https://vercel.com/storage/blob) for efficient file storage
-- [Auth.js](https://authjs.dev)
-  - Simple and secure authentication
+- **Next.js 15** with App Router
+  - Server Components and Server Actions
+  - TypeScript support
+  - Turbopack for fast development
 
-## Model Providers
+- **Authentication**
+  - Supabase Auth integration
+  - Protected routes via middleware
+  - Login and registration pages
 
-This template ships with [OpenAI](https://openai.com) `gpt-4o` as the default chat model. However, with the [AI SDK](https://sdk.vercel.ai/docs), you can switch LLM providers to [Anthropic](https://anthropic.com), [Cohere](https://cohere.com/), and [many more](https://sdk.vercel.ai/providers/ai-sdk-providers) with just a few lines of code.
+- **Database**
+  - Supabase integration ready
+  - Database migrations included
+  - Row Level Security (RLS) support
 
-## Deploy Your Own
+- **UI Components**
+  - shadcn/ui components
+  - Tailwind CSS styling
+  - Dark mode support with next-themes
+  - Responsive design
 
-You can deploy your own version of the Next.js AI Chatbot to Vercel with one click:
+- **Developer Experience**
+  - Biome for linting and formatting
+  - TypeScript strict mode
+  - Path aliases configured
+  - OpenTelemetry instrumentation
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fai-chatbot&env=AUTH_SECRET&envDescription=Learn+more+about+how+to+get+the+API+Keys+for+the+application&envLink=https%3A%2F%2Fgithub.com%2Fvercel%2Fai-chatbot%2Fblob%2Fmain%2F.env.example&demo-title=AI+Chatbot&demo-description=An+Open-Source+AI+Chatbot+Template+Built+With+Next.js+and+the+AI+SDK+by+Vercel.&demo-url=https%3A%2F%2Fchat.vercel.ai&products=%5B%7B%22type%22%3A%22integration%22%2C%22protocol%22%3A%22ai%22%2C%22productSlug%22%3A%22grok%22%2C%22integrationSlug%22%3A%22xai%22%7D%2C%7B%22type%22%3A%22integration%22%2C%22protocol%22%3A%22storage%22%2C%22productSlug%22%3A%22neon%22%2C%22integrationSlug%22%3A%22neon%22%7D%2C%7B%22type%22%3A%22integration%22%2C%22protocol%22%3A%22storage%22%2C%22productSlug%22%3A%22upstash-kv%22%2C%22integrationSlug%22%3A%22upstash%22%7D%2C%7B%22type%22%3A%22blob%22%7D%5D)
+## Getting Started
 
-## Running locally
+### Prerequisites
 
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js AI Chatbot. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) for this, but a `.env` file is all that is necessary.
+- Node.js 18+ 
+- pnpm (recommended) or npm
 
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various AI and authentication provider accounts.
+### Environment Variables
 
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
-3. Download your environment variables: `vercel env pull`
+Create a `.env.local` file in the root directory:
 
 ```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### Installation
+
+```bash
+# Install dependencies
 pnpm install
+
+# Run development server
 pnpm dev
 ```
 
-Your app template should now be running on [localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) to see your application.
+
+### Database Setup
+
+1. Create a Supabase project at [supabase.com](https://supabase.com)
+2. Run the migrations in `lib/db/migrations/` to set up your database schema
+3. Update your `.env.local` with your Supabase credentials
+
+## Project Structure
+
+```
+├── app/
+│   ├── (auth)/          # Authentication pages and logic
+│   ├── layout.tsx       # Root layout
+│   ├── page.tsx         # Homepage
+│   └── globals.css      # Global styles
+├── components/
+│   ├── ui/              # shadcn/ui components
+│   └── ...              # Custom components
+├── hooks/               # Custom React hooks
+├── lib/
+│   ├── db/              # Database queries and migrations
+│   ├── constants.ts     # App constants
+│   ├── errors.ts        # Error handling
+│   ├── supabase.ts      # Supabase client
+│   ├── types.ts         # TypeScript types
+│   └── utils.ts         # Utility functions
+└── middleware.ts        # Auth middleware
+
+```
+
+## Available Scripts
+
+- `pnpm dev` - Start development server with Turbopack
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm lint` - Run linting
+- `pnpm format` - Format code with Biome
+
+## Customization
+
+### Adding Protected Routes
+
+Edit `middleware.ts` to add your protected routes:
+
+```typescript
+function isProtectedRoute(pathname: string): boolean {
+  return pathname === '/' || pathname.startsWith('/dashboard');
+}
+```
+
+### Styling
+
+- Global styles: `app/globals.css`
+- Tailwind config: `tailwind.config.ts`
+- Theme configuration: Uses next-themes for dark mode
+
+## Learn More
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Supabase Documentation](https://supabase.com/docs)
+- [shadcn/ui Documentation](https://ui.shadcn.com)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+
+## License
+
+MIT
